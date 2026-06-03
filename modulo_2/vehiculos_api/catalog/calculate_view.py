@@ -16,6 +16,7 @@ def calcular_area_triangulo(request):
         return JsonResponse({
             'error':'Debe enviar base y altura validada'
         },status=400)
+    
 @api_view( ['POST'])
 def promedio_ventas(request):
     try:
