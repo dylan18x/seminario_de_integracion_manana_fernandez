@@ -10,6 +10,10 @@ from store.views.category  import CategoryViewSet
 from store.views.product   import ProductViewSet
 from store.views.order     import OrderViewSet
 from store.serializers.auth import CustomTokenView
+from store.views.auth import (
+    RegisterView, LoginView, LogoutView, RefreshTokenView,
+    PasswordResetRequestView, PasswordResetConfirmView,
+)
 
 router = DefaultRouter()
 router.register('users',      UserViewSet,     basename='user')
@@ -24,5 +28,8 @@ urlpatterns = [
     path('auth/token/refresh/', TokenRefreshView.as_view()),
     path('auth/token/verify/',  TokenVerifyView.as_view()),
     path('auth/logout/',        LogoutView.as_view()),
+    path('auth/token/refresh/',          RefreshTokenView.as_view(),         name='auth-token-refresh'),
+    path('auth/password-reset/',         PasswordResetRequestView.as_view(), name='auth-password-reset'),       # ← nuevo
+    path('auth/password-reset/confirm/', PasswordResetConfirmView.as_view(), name='auth-password-reset-confirm'), # ← nuevo
     path('', include(router.urls)),
 ]
