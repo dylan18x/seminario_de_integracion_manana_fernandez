@@ -6,6 +6,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 
 
+
 class RegisterSerializer(serializers.Serializer):
     username  = serializers.CharField(max_length=150)
     email     = serializers.EmailField()
@@ -129,8 +130,6 @@ class PasswordResetRequestSerializer(serializers.Serializer):
     # No validamos si el email existe en esta capa:
     # la vista lo maneja en silencio para evitar enumeración de usuarios.
 
-
-
 class PasswordResetConfirmSerializer(serializers.Serializer):
     """Paso 2: el usuario envía uid + token + nueva contraseña."""
     uid           = serializers.CharField()
@@ -161,3 +160,23 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user
+    
+class SendNotificationSerializer(serializers.Serializer):
+    """
+    Cuerpo del request para enviar una notificación manual.
+
+    - Si se provee `user_id`, el correo va solo a ese usuario.
+    - Si `user_id` es null u omitido, el correo se envía a todos los
+      usuarios activos que no son staff (envío masivo).
+    """
+    subject = serializers.CharField(max_length=200)
+    message = serializers.CharField()
+    user_id = serializers.IntegerField(required=False, allow_null=True)
+
+    def validate_user_id(self, value):
+        if value is not None:
+            if not User.objects.filter(pk=value, is_active=True, is_staff=False).exists():
+                raise serializers.ValidationError(
+                    'Usuario no encontrado, inactivo o es staff.'
+                )
+        return value
