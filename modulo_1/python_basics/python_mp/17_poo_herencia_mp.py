@@ -52,7 +52,7 @@ class LibroDigital(Libro):
     def descargas_realizadas(self):
         return self.__descargas
 
-    def __str__(self):
+    def __str__(self): 
         return (f"{super().__str__()} | "
                 f"Descargas: {self.__descargas} | "
                 f"URL: {self.__url}")
