@@ -2,6 +2,8 @@
 import { useEffect } from 'react'
 import AppRouter from './presentation/router/AppRouter'
 import { apiClient } from './infrastructure/http/axios-client'
+import { Toaster } from 'sonner'
+
 
 export default function App() {
   useEffect(() => {
@@ -12,5 +14,10 @@ export default function App() {
     })
   }, [])
 
-  return <AppRouter />
+  return (
+    <>
+      <AppRouter />
+      <Toaster richColors position="top-right" />
+    </>
+  )
 }
