@@ -13,6 +13,7 @@ const LoginPage = lazy(() => import('../pages/auth/LoginPage'))
 const RegisterPage = lazy(() => import('../pages/auth/RegisterPage'))
 const CatalogPage = lazy(() => import('../pages/catalog/CatalogPage'))
 const ProductDetailPage = lazy(() => import('../pages/catalog/ProductDetailPage'))
+const CartPage = lazy(() => import('../pages/cart/CartPage'))
 
 // El resto de páginas todavía no existen: se implementan en módulos posteriores
 // (Catálogo → 4/5, Carrito → 6, Órdenes → 7, Perfil → 8, Admin → 9-13) y cada uno
@@ -21,121 +22,121 @@ const ProductDetailPage = lazy(() => import('../pages/catalog/ProductDetailPage'
 // ─── Loader global ────────────────────────────────────────────────────────────
 
 function PageLoader() {
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-    </div>
-  )
+    return (
+        <div className="flex min-h-screen items-center justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
+    )
 }
 
 // ─── Router ───────────────────────────────────────────────────────────────────
 
 export default function AppRouter() {
-  const loadSession = useAuthStore((state) => state.loadSession)
+    const loadSession = useAuthStore((state) => state.loadSession)
 
-  // Cargar la sesión guardada al iniciar la app.
-  // loadSession() restaura los tokens y valida el token con /auth/me/
-  useEffect(() => {
-    loadSession()
-  }, [loadSession])
+    // Cargar la sesión guardada al iniciar la app.
+    // loadSession() restaura los tokens y valida el token con /auth/me/
+    useEffect(() => {
+        loadSession()
+    }, [loadSession])
 
-  return (
-    <BrowserRouter>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          {/* ── Rutas de autenticación (sin AppShell) ── */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+    return (
+        <BrowserRouter>
+            <Suspense fallback={<PageLoader />}>
+                <Routes>
+                    {/* ── Rutas de autenticación (sin AppShell) ── */}
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
 
-          {/* ── Rutas con AppShell ── */}
-          <Route element={<AppShell />}>
-            {/* Públicas — placeholder hasta el módulo 4/5 */}
-            <Route path="/products/:id" element={<ProductDetailPage />} />
-            <Route path="/" element={<CatalogPage />} />
-            <Route path="/catalog" element={<CatalogPage />} />
-            
+                    {/* ── Rutas con AppShell ── */}
+                    <Route element={<AppShell />}>
+                        {/* Públicas — placeholder hasta el módulo 4/5 */}
+                        <Route path="/products/:id" element={<ProductDetailPage />} />
+                        <Route path="/" element={<CatalogPage />} />
+                        <Route path="/catalog" element={<CatalogPage />} />
 
-            {/* Requieren autenticación — placeholder hasta los módulos 6, 7 y 8 */}
-            <Route
-              path="/cart"
-              element={
-                <ProtectedRoute>
-                  <PlaceholderPage title="Carrito — Módulo 6" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/orders"
-              element={
-                <ProtectedRoute>
-                  <PlaceholderPage title="Órdenes — Módulo 7" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/orders/:id"
-              element={
-                <ProtectedRoute>
-                  <PlaceholderPage title="Detalle de orden — Módulo 7" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <PlaceholderPage title="Perfil — Módulo 8" />
-                </ProtectedRoute>
-              }
-            />
 
-            {/* Requieren autenticación + rol staff — placeholder hasta los módulos 9 a 13 */}
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute requireStaff>
-                  <PlaceholderPage title="Admin Dashboard — Módulo 9" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/categories"
-              element={
-                <ProtectedRoute requireStaff>
-                  <PlaceholderPage title="Admin Categorías — Módulo 10" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/products"
-              element={
-                <ProtectedRoute requireStaff>
-                  <PlaceholderPage title="Admin Productos — Módulo 11" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/orders"
-              element={
-                <ProtectedRoute requireStaff>
-                  <PlaceholderPage title="Admin Órdenes — Módulo 12" />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/users"
-              element={
-                <ProtectedRoute requireStaff>
-                  <PlaceholderPage title="Admin Usuarios — Módulo 13" />
-                </ProtectedRoute>
-              }
-            />
-          </Route>
+                        {/* Requieren autenticación — placeholder hasta los módulos 6, 7 y 8 */}
+                        <Route
+                            path="/cart"
+                            element={
+                                <ProtectedRoute>
+                                    <CartPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/orders"
+                            element={
+                                <ProtectedRoute>
+                                    <PlaceholderPage title="Órdenes — Módulo 7" />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/orders/:id"
+                            element={
+                                <ProtectedRoute>
+                                    <PlaceholderPage title="Detalle de orden — Módulo 7" />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/profile"
+                            element={
+                                <ProtectedRoute>
+                                    <PlaceholderPage title="Perfil — Módulo 8" />
+                                </ProtectedRoute>
+                            }
+                        />
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
-  )
+                        {/* Requieren autenticación + rol staff — placeholder hasta los módulos 9 a 13 */}
+                        <Route
+                            path="/admin"
+                            element={
+                                <ProtectedRoute requireStaff>
+                                    <PlaceholderPage title="Admin Dashboard — Módulo 9" />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/admin/categories"
+                            element={
+                                <ProtectedRoute requireStaff>
+                                    <PlaceholderPage title="Admin Categorías — Módulo 10" />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/admin/products"
+                            element={
+                                <ProtectedRoute requireStaff>
+                                    <PlaceholderPage title="Admin Productos — Módulo 11" />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/admin/orders"
+                            element={
+                                <ProtectedRoute requireStaff>
+                                    <PlaceholderPage title="Admin Órdenes — Módulo 12" />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/admin/users"
+                            element={
+                                <ProtectedRoute requireStaff>
+                                    <PlaceholderPage title="Admin Usuarios — Módulo 13" />
+                                </ProtectedRoute>
+                            }
+                        />
+                    </Route>
+
+                    {/* Fallback */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </Suspense>
+        </BrowserRouter>
+    )
 }
