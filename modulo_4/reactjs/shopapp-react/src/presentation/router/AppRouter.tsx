@@ -20,6 +20,8 @@ const OrderDetailPage = lazy(() => import('../pages/orders/OrderDetailPage'))
 const ProfilePage = lazy(() => import('../pages/profile/ProfilePage'))
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'))
 const AdminCategoriesPage = lazy(() => import('../pages/admin/AdminCategoriesPage'))
+const AdminProductsPage = lazy(() => import('../pages/admin/AdminProductsPage'))
+
 
 
 
@@ -127,7 +129,7 @@ export default function AppRouter() {
                             path="/admin/products"
                             element={
                                 <ProtectedRoute requireStaff>
-                                    <PlaceholderPage title="Admin Productos — Módulo 11" />
+                                <AdminProductsPage />
                                 </ProtectedRoute>
                             }
                         />
