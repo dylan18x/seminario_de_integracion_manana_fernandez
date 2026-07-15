@@ -21,6 +21,9 @@ const ProfilePage = lazy(() => import('../pages/profile/ProfilePage'))
 const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'))
 const AdminCategoriesPage = lazy(() => import('../pages/admin/AdminCategoriesPage'))
 const AdminProductsPage = lazy(() => import('../pages/admin/AdminProductsPage'))
+const AdminOrdersPage = lazy(() => import('../pages/admin/AdminOrdersPage'))
+const AdminOrderDetailPage = lazy(() => import('../pages/admin/AdminOrderDetailPage'))
+
 
 
 
@@ -137,7 +140,15 @@ export default function AppRouter() {
                             path="/admin/orders"
                             element={
                                 <ProtectedRoute requireStaff>
-                                    <PlaceholderPage title="Admin Órdenes — Módulo 12" />
+                                <AdminOrdersPage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/admin/orders/:id"
+                            element={
+                                <ProtectedRoute requireStaff>
+                                <AdminOrderDetailPage />
                                 </ProtectedRoute>
                             }
                         />
