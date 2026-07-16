@@ -6,6 +6,7 @@ import type { ProductStats } from '../entities/product-stats.entity'
 
 export interface ProductRepository {
   getProducts(filters?: Partial<ProductFilters>, page?: number): Promise<PaginatedResult<Product>>
+  
   getProduct(id: number): Promise<Product>
   getStats(): Promise<ProductStats>
 
@@ -31,4 +32,6 @@ export interface ProductRepository {
   ): Promise<Product>
   deleteProduct(id: number): Promise<void>
   restockProduct(id: number, quantity: number): Promise<{ id: number; name: string; new_stock: number }>
+  uploadImage(id: number, file: File): Promise<Product>
+
 }
